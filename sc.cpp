@@ -86,43 +86,44 @@ int Caculate_expression(const string &str){
 	PRI['(']=3;
 	PRI[')']=3;
 	stack<char> Sym;		//store for the operator
-	stack<int> Num;			//store for the number
+	stack<string> Num;			//store for the number
 	string int_s;
 	for(auto v:str){
 		if(isdigit(v))
-			int_s+=v;
+		 	int_s+=v;
 		else{
-			int k=stoi(int_s);
-			Num.push(k);
+			Num.push(int_s);
 			int_s.erase(0);
 			if(Sym.empty()||v=='(')
 				Sym.push(v);
 			else if(v==')'){
 				while(Sym.top()!='('){
-					int a=Num.top();
+					int a=stoi(Num.top());
 					Num.pop();
-					int b=Num.top();
+					int b=stoi(Num.top());
 					Num.pop();
 					char o=Sym.top();
 					Sym.pop();
 					int r=Caculate_twonums(a,b,o);
-					Num.push(r);	
+					string s=to_string(r);
+					Num.push(s);	
 				}
 				Sym.pop();
 			}
 			else{
 				while(!Sym.empty()){
 					if(PRI[Sym.top()]>=PRI[v]&&PRI[Sym.top()]<=2){
-						int a=Num.top();//可简化 
+						int a=stoi(Num.top());//可简化 
 						Num.pop();
-						int b=Num.top();
+						int b=stoi(Num.top());
 						Num.pop();
 						char o=Sym.top();
 						Sym.pop();
 						int r=Caculate_twonums(a,b,o);
 						//2
 						//cout<<r<<endl;
-						Num.push(r);
+						string s=to_string(r);
+						Num.push(s);
 					}else
 						break;
 				}
@@ -130,21 +131,22 @@ int Caculate_expression(const string &str){
 			}
 		}
 	}
-	int k=stoi(int_s);
-	Num.push(k);
+	Num.push(int_s);
 	while(!Sym.empty()){
-		int a=Num.top();
+		int a=stoi(Num.top());
 		Num.pop();
-		int b=Num.top();
+		int b=stoi(Num.top());
 		Num.pop();
 		char o=Sym.top();
 		Sym.pop();
 		int r=Caculate_twonums(a,b,o);
 		//2
 		//cout<<r<<endl;
-		Num.push(r);
+		string s=to_string(r);
+		Num.push(s);
 	}
-	return Num.top();
+	int res=stoi(Num.top());
+	return res;
 }
 int main(){
 	string str;
